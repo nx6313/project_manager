@@ -1,0 +1,294 @@
+{
+    "projects": [
+        {
+            "id": "23fdfd3dfrwr-345df-4-fdsf",
+            "name": "电商系统",
+            "icon": "http://pics.sc.chinaz.com/Files/pic/faces/5094/1.gif",
+            "progress": 70,
+            "duty-person": "李四",
+            "period-start": "2018.06.19",
+            "period-end": "2018.07.03",
+            "cur-status": "正常",
+            "cur-node": "测评",
+            "people-num": 29
+        },
+        {
+            "id": "23fdfd3dfrwr-345df-5-fdsf",
+            "name": "ARM系统",
+            "icon": "http://pics.sc.chinaz.com/Files/pic/faces/5094/1.gif",
+            "progress": 80,
+            "duty-person": "李四",
+            "period-start": "2018.06.19",
+            "period-end": "2018.07.03",
+            "cur-status": "正常",
+            "cur-node": "测评",
+            "people-num": 29
+        },
+        {
+            "id": "23fdfd3dfrwr-345df-6-fdsf",
+            "name": "拉拉1系统",
+            "icon": "http://pics.sc.chinaz.com/Files/pic/faces/5094/1.gif",
+            "progress": 10,
+            "duty-person": "李四",
+            "period-start": "2018.06.19",
+            "period-end": "2018.07.03",
+            "cur-status": "正常",
+            "cur-node": "测评",
+            "people-num": 29
+        },
+        {
+            "id": "23fdfd3dfrwr-345df-7-fdsf",
+            "name": "俱乐部系统",
+            "icon": "http://pics.sc.chinaz.com/Files/pic/faces/5094/1.gif",
+            "progress": 26,
+            "duty-person": "李四",
+            "period-start": "2018.06.19",
+            "period-end": "2018.07.03",
+            "cur-status": "正常",
+            "cur-node": "测评",
+            "people-num": 29
+        }
+    ],
+    "23fdfd3dfrwr-345df-4-fdsf": {
+        "id": "23fdfd3dfrwr-345df-4-fdsf",
+        "name": "电商系统",
+        "icon": "http://pics.sc.chinaz.com/Files/pic/faces/5094/1.gif",
+        "progress": 70,
+        "duty-person": "李四",
+        "period-start": "2018.06.19",
+        "period-end": "2018.07.03",
+        "cur-status": "正常",
+        "cur-node": "测评",
+        "people-num": 29,
+        "modes": [
+            {
+                "name": "整车销售",
+                "duty-person": "李四",
+                "period-start": "2018.06.19",
+                "period-end": "2018.07.03",
+                "plan-day": 48,
+                "use-day": 20,
+                "nodes": [
+                    {
+                        "title": "需求调研",
+                        "executors": [
+                            {
+                                "duty": "产品经理",
+                                "peoples": [
+                                    "王大鹏"
+                                ]
+                            }
+                        ],
+                        "plan-day": 12,
+                        "end-date": "2018-02-12",
+                        "status": 2
+                    },
+                    {
+                        "title": "原型设计",
+                        "executors": [
+                            {
+                                "duty": "产品经理",
+                                "peoples": [
+                                    "王大鹏", "王二鹏"
+                                ]
+                            }
+                        ],
+                        "plan-day": 12,
+                        "end-date": "2018-02-12",
+                        "status": 2
+                    },
+                    {
+                        "title": "UI 设计",
+                        "executors": [
+                            {
+                                "duty": "UI设计师",
+                                "peoples": [
+                                    "王大鹏", "王二鹏", "王三鹏", "王四鹏"
+                                ]
+                            }
+                        ],
+                        "plan-day": 12,
+                        "end-date": "2018-02-12",
+                        "status": 2
+                    },
+                    {
+                        "title": "开发",
+                        "executors": [
+                            {
+                                "duty": "JAVA开发",
+                                "peoples": [
+                                    "王大鹏", "王二鹏", "王三鹏", "王四鹏"
+                                ]
+                            },
+                            {
+                                "duty": "前端开发",
+                                "peoples": [
+                                    "王大鹏", "王二鹏", "王三鹏"
+                                ]
+                            }
+                        ],
+                        "plan-day": 12,
+                        "end-date": "2018-02-12",
+                        "status": 1
+                    },
+                    {
+                        "title": "测试",
+                        "executors": [
+                            {
+                                "duty": "测试人员",
+                                "peoples": [
+                                    "王大鹏", "王二鹏", "王三鹏", "王四鹏"
+                                ]
+                            }
+                        ],
+                        "plan-day": 12,
+                        "end-date": "2018-02-12",
+                        "status": 0
+                    },
+                    {
+                        "title": "部署",
+                        "executors": [
+                            {
+                                "duty": "部署人员",
+                                "peoples": [
+                                    "王大鹏", "王二鹏", "王三鹏", "王四鹏"
+                                ]
+                            }
+                        ],
+                        "plan-day": 12,
+                        "end-date": "2018-02-12",
+                        "status": 0
+                    },
+                    {
+                        "title": "上线",
+                        "executors": [
+                            {
+                                "duty": "上线人员",
+                                "peoples": [
+                                    "王大鹏", "王二鹏", "王三鹏", "王四鹏"
+                                ]
+                            }
+                        ],
+                        "plan-day": 12,
+                        "end-date": "2018-02-12",
+                        "status": 0
+                    }
+                ]
+            },
+            {
+                "name": "部分销售",
+                "duty-person": "李四",
+                "period-start": "2018.06.19",
+                "period-end": "2018.07.03",
+                "plan-day": 48,
+                "use-day": 20,
+                "nodes": [
+                    {
+                        "title": "需求调研",
+                        "executors": [
+                            {
+                                "duty": "产品经理",
+                                "peoples": [
+                                    "王大鹏"
+                                ]
+                            }
+                        ],
+                        "plan-day": 12,
+                        "end-date": "2018-02-12",
+                        "status": 2
+                    },
+                    {
+                        "title": "原型设计",
+                        "executors": [
+                            {
+                                "duty": "产品经理",
+                                "peoples": [
+                                    "王大鹏", "王二鹏"
+                                ]
+                            }
+                        ],
+                        "plan-day": 12,
+                        "end-date": "2018-02-12",
+                        "status": 2
+                    },
+                    {
+                        "title": "UI 设计",
+                        "executors": [
+                            {
+                                "duty": "UI设计师",
+                                "peoples": [
+                                    "王大鹏", "王二鹏", "王三鹏", "王四鹏"
+                                ]
+                            }
+                        ],
+                        "plan-day": 12,
+                        "end-date": "2018-02-12",
+                        "status": 2
+                    },
+                    {
+                        "title": "开发",
+                        "executors": [
+                            {
+                                "duty": "JAVA开发",
+                                "peoples": [
+                                    "王大鹏", "王二鹏", "王三鹏", "王四鹏"
+                                ]
+                            },
+                            {
+                                "duty": "前端开发",
+                                "peoples": [
+                                    "王大鹏", "王二鹏", "王三鹏"
+                                ]
+                            }
+                        ],
+                        "plan-day": 12,
+                        "end-date": "2018-02-12",
+                        "status": 1
+                    },
+                    {
+                        "title": "测试",
+                        "executors": [
+                            {
+                                "duty": "测试人员",
+                                "peoples": [
+                                    "王大鹏", "王二鹏", "王三鹏", "王四鹏"
+                                ]
+                            }
+                        ],
+                        "plan-day": 12,
+                        "end-date": "2018-02-12",
+                        "status": 0
+                    },
+                    {
+                        "title": "部署",
+                        "executors": [
+                            {
+                                "duty": "部署人员",
+                                "peoples": [
+                                    "王大鹏", "王二鹏", "王三鹏", "王四鹏"
+                                ]
+                            }
+                        ],
+                        "plan-day": 12,
+                        "end-date": "2018-02-12",
+                        "status": 0
+                    },
+                    {
+                        "title": "上线",
+                        "executors": [
+                            {
+                                "duty": "上线人员",
+                                "peoples": [
+                                    "王大鹏", "王二鹏", "王三鹏", "王四鹏"
+                                ]
+                            }
+                        ],
+                        "plan-day": 12,
+                        "end-date": "2018-02-12",
+                        "status": 0
+                    }
+                ]
+            }
+        ]
+    }
+}
