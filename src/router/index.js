@@ -1,10 +1,19 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import VueResource from 'vue-resource'
+import Moment from '@/utils/moment.js'
+import ComFun from '@/utils/comfun.js'
+import '@/plugins/animate.css'
+import Msgbox from '@/plugins/msgbox/msgbox.js'
 import ProjectList from '@/components/ProjectList'
 import ProjectDetail from '@/components/ProjectDetail'
 import ProjectManager from '@/components/ProjectManager'
 
 Vue.use(Router)
+Vue.use(VueResource)
+Vue.use(Moment)
+Vue.use(ComFun)
+Vue.use(Msgbox)
 
 var router = new Router({
   routes: [

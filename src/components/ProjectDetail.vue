@@ -129,11 +129,14 @@ export default {
     this.projectData = require('./../../static/data.json')[this.projectId]
   },
   mounted () {
-    for (let m = 0; m < this.projectData.modes.length; m++) {
-      let modeIcon = this.$refs['mode-icon-' + m]
-      modeIcon[0].style.top = `-${modeIcon[0].offsetHeight * 1 / 3}px`
-      modeIcon[0].style.right = `-${modeIcon[0].offsetWidth}px`
+    if (this.projectData && this.projectData.modes) {
+      for (let m = 0; m < this.projectData.modes.length; m++) {
+        let modeIcon = this.$refs['mode-icon-' + m]
+        modeIcon[0].style.top = `-${modeIcon[0].offsetHeight * 1 / 3}px`
+        modeIcon[0].style.right = `-${modeIcon[0].offsetWidth}px`
+      }
     }
+    scrollTo(0, 0)
   },
   methods: {
     formatDate: function (date, fmt) {

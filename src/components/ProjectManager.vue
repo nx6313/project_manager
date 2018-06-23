@@ -2,8 +2,9 @@
   <div class="project-manager-wrap">
     <div class="title">项目数据管理</div>
     <div class="btn-wrap">
-      <button>添加新项目</button>
-      <button>保存修改</button>
+      <div class="update-tip" v-show="updteFlag">存在未保存的新数据</div>
+      <button @click="addNewProject">添加新项目</button>
+      <button @click="saveAppData">保存修改</button>
     </div>
     <div>
       <div>
@@ -32,14 +33,14 @@
               <td>{{app['cur-node']}}</td>
               <td>{{app['people-num']}}</td>
               <td>
-                <button>修改</button>
-                <button>删除</button>
+                <button @click="updateProject(app)">修改</button>
+                <button @click="deleteProject(appIndex)">删除</button>
               </td>
             </tr>
             <tr>
               <td class="detail-td" colspan="10">
                 <div class="detail-btn-wrap">
-                  <button>添加新模块</button>
+                  <button @click="addNewMode(appIndex)">添加新模块</button>
                 </div>
                 <table class="detail-table">
                   <tr>
@@ -49,6 +50,7 @@
                     <th>模块结束时间</th>
                     <th>模块计划天数</th>
                     <th>模块已用天数</th>
+                    <th>模块剩余天数</th>
                     <th>操作</th>
                   </tr>
                   <template v-if="appData[app.id]">
@@ -60,13 +62,14 @@
                         <td>{{mode['period-end']}}</td>
                         <td>{{mode['plan-day']}}</td>
                         <td>{{mode['use-day']}}</td>
+                        <td>{{mode['plan-day'] - mode['use-day']}}</td>
                         <td>
-                          <button>修改</button>
-                          <button>删除</button>
+                          <button @click="updateMode(mode)">修改</button>
+                          <button @click="deleteMode(app.id, modeIndex)">删除</button>
                         </td>
                       </tr>
                       <tr>
-                        <td colspan="7">
+                        <td class="note-td" colspan="8">
                             <div class="node-tree-wrap">
                                 <div :class="['node-item-wrap', 'status-' + node.status, node.status === 1 ? 'open' : 'close']" v-for="(node, nodeIndex) in mode.nodes" :key="nodeIndex" :ref="'mode-item-' + modeIndex + '-node-item-' + nodeIndex" @click.stop="toggleUnfoldNode(modeIndex, nodeIndex)">
                                 <span class="point-line"></span>
@@ -101,7 +104,9 @@
             </tr>
           </tbody>
           <tbody v-if="!(appData.projects && appData.projects.length > 0)">
-            <tr class="full-td" colspan="10">暂无计划中项目</tr>
+            <tr>
+              <td class="full-td" colspan="10">暂无计划中项目</td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -113,11 +118,21 @@
 export default {
   data () {
     return {
+      isEmpty: false,
+      updteFlag: false,
       appData: {}
     }
   },
   created () {
     this.appData = require('./../../static/data.json')
+    if (!this.appData.projects) {
+      this.appData = {
+        projects: []
+      }
+    }
+    if (this.appData.projects.length === 0) {
+      this.isEmpty = true
+    }
   },
   methods: {
     toggleUnfoldNode (index, nodeIndex) {
@@ -133,6 +148,91 @@ export default {
         clickNodeItem.getElementsByClassName('dutys-show')[0].style.display = 'inline-block'
         clickNodeItem.getElementsByClassName('dutys-tree-show')[0].style.display = 'none'
       }
+    },
+    addNewProject () {
+      this.$dialog_pop()
+      // this.appData.projects.splice(this.appData.projects.length, 1, {
+      //   id: this.$comfun.guid(),
+      //   name: '电商系统' + new Date().getSeconds(),
+      //   icon: 'http://pics.sc.chinaz.com/Files/pic/faces/5094/1.gif',
+      //   progress: 70,
+      //   'duty-person': '李四',
+      //   'period-start': '2018.06.19',
+      //   'period-end': '2018.07.03',
+      //   'cur-status': '正常',
+      //   'cur-node': '测评',
+      //   'people-num': 29
+      // })
+      // this.updteFlag = true
+    },
+    updateProject (pData) {
+      pData.name = '电商系统' + new Date().getSeconds()
+      this.updteFlag = true
+    },
+    deleteProject (pIndex) {
+      this.appData.projects.splice(pIndex, 1)
+      if (this.isEmpty && this.appData.projects.length === 0) {
+        this.updteFlag = false
+      } else {
+        this.updteFlag = true
+      }
+    },
+    addNewMode (pIndex) {
+      var pId = this.appData.projects[pIndex].id
+      if (!this.appData[pId]) {
+        this.$set(this.appData, pId, {
+          id: this.appData.projects[pIndex].id,
+          name: this.appData.projects[pIndex].name,
+          icon: this.appData.projects[pIndex].icon,
+          progress: this.appData.projects[pIndex].progress,
+          'duty-person': this.appData.projects[pIndex]['duty-person'],
+          'period-start': this.appData.projects[pIndex]['period-start'],
+          'period-end': this.appData.projects[pIndex]['period-end'],
+          'cur-status': this.appData.projects[pIndex]['cur-status'],
+          'cur-node': this.appData.projects[pIndex]['cur-node'],
+          'people-num': this.appData.projects[pIndex]['people-num'],
+          modes: []
+        })
+      }
+      this.appData[pId].modes.splice(this.appData[pId].modes.length, 1, {
+        name: '整车销售',
+        'duty-person': '李四',
+        'period-start': '2018.06.19',
+        'period-end': '2018.07.03',
+        'plan-day': 48,
+        'use-day': 20,
+        nodes: [
+          {
+            title: '需求调研',
+            executors: [
+              {
+                duty: '产品经理',
+                peoples: [
+                  '王大鹏'
+                ]
+              }
+            ],
+            'plan-day': 12,
+            'end-date': '2018-02-12',
+            status: 2
+          }
+        ]
+      })
+    },
+    updateMode (mode) {
+      mode.name = '电商系统' + new Date().getSeconds()
+      this.updteFlag = true
+    },
+    deleteMode (pId, modeIndex) {
+      this.appData[pId].modes.splice(modeIndex, 1)
+      if (this.appData[pId].modes.length === 0) {
+        delete this.appData[pId]
+      }
+      this.updteFlag = true
+    },
+    saveAppData () {
+      console.log(this.appData)
+      this.updteFlag = false
     }
   }
 }
@@ -142,11 +242,22 @@ export default {
 .title {
   text-align: center;
   font-weight: bold;
-  font-size: 8rem;
+  font-size: 1.8rem;
   margin-top: 1rem;
 }
 
+.update-tip {
+  position: absolute;
+  top: -1.6rem;
+  font-size: 0.8rem;
+  background: #f35f4c;
+  padding: 0.2rem 0.4rem;
+  width: calc(90vw - 0.8rem);
+  transition: all 0.4s ease 0s;
+}
+
 .btn-wrap {
+  position: relative;
   padding: 0.4rem 5vw;
   margin-top: 2rem;
 }
@@ -165,7 +276,7 @@ table {
   font-size: 11px;
   color: #333333;
   border-width: 1px;
-  border-color: #999999;
+  border-color: rgba(102, 102, 102, 0.35);
   border-collapse: collapse;
   margin-bottom: 1.6rem;
 }
@@ -178,9 +289,9 @@ table th {
   background-size: auto 100%;
   border-width: 1px;
   padding: 8px;
-  height: 3rem;
+  height: 1rem;
   border-style: solid;
-  border-color: #999999;
+  border-color: rgba(102, 102, 102, 0.35);
 }
 
 table td {
@@ -192,7 +303,7 @@ table td {
   border-width: 1px;
   padding: 8px;
   border-style: solid;
-  border-color: #666666;
+  border-color: rgba(102, 102, 102, 0.35);
   text-align: center;
 }
 
@@ -204,8 +315,12 @@ table td.full-td {
   background-size: 100% auto;
 }
 
+table td.note-td {
+  background: #fdecf6;
+}
+
 table td img {
-  height: 160px;
+  height: 2.4rem;
 }
 
 table.detail-table {
@@ -214,7 +329,7 @@ table.detail-table {
 }
 
 table.detail-table th {
-  height: 2rem;
+  height: 1rem;
 }
 
 .detail-btn-wrap {
@@ -247,7 +362,7 @@ div.node-tree-wrap > div.node-item-wrap::before {
   height: 1rem;
   border-radius: 50%;
   z-index: 9;
-  border: 4px solid #DDDDC1;
+  border: 4px solid #fdecf6;
 }
 
 div.node-tree-wrap > div.status-0::before {
@@ -311,7 +426,7 @@ div.node-tree-wrap > div.status-2 > .point-line {
 
 div.node-tree-wrap > div.node-item-wrap > .title {
   position: relative;
-  display: inline-block;
+  /* display: inline-block; */
   font-weight: bold;
   width: 4.2rem;
   overflow: hidden;
@@ -329,13 +444,14 @@ div.node-tree-wrap > div.node-item-wrap > .dutys-show {
   display: inline-block;
   position: relative;
   width: calc(100% - 2.6rem - 4.2rem);
-  background: #F1F1F1;
+  background: rgb(176, 219, 236);
   padding: 0.4rem 0.8rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   vertical-align: middle;
   font-size: 0.8rem;
+  margin-left: 20px;
 }
 
 div.node-tree-wrap > div.node-item-wrap > .dutys-show > div {
@@ -351,6 +467,7 @@ div.node-tree-wrap > div.node-item-wrap > .dutys-tree-show {
   white-space: nowrap;
   vertical-align: top;
   overflow: visible;
+  margin-left: 20px;
 }
 
 div.node-tree-wrap > div.node-item-wrap > .dutys-tree-show > div {
@@ -361,7 +478,7 @@ div.node-tree-wrap > div.node-item-wrap > .dutys-tree-show > div {
 div.node-tree-wrap > div.node-item-wrap > .dutys-tree-show > div > span {
   position: relative;
   display: block;
-  background: #F1F1F1;
+  background: rgb(176, 219, 236);
   padding: 0.4rem 0.8rem;
   font-size: 0.8rem;
 }
