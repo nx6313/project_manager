@@ -60,5 +60,9 @@ export default {
   z-index: 9999;
   box-shadow: 0 0 20px 5px rgba(49, 49, 49, 0.1);
   padding: 0.8rem 1.4rem;
+  -vendor-animation-duration: 0.2s;
+  animation-duration: 0.2s;
+  -vendor-animation-delay: 0.1s;
+  animation-delay: 0.1s;
 }
 </style>
