@@ -1,10 +1,13 @@
 <template>
   <div class="project-manager-wrap">
     <div class="title">项目数据管理</div>
+    <div class="update-tip" v-show="updteFlag">
+      <img src="./../assets/loading.gif">
+      <span>数据保存中...</span>
+    </div>
     <div class="btn-wrap">
-      <div class="update-tip" v-show="updteFlag">存在未保存的新数据</div>
       <button @click="addNewProject">添加新项目</button>
-      <button @click="saveAppData">保存修改</button>
+      <!-- <button @click="saveAppData">保存修改</button> -->
     </div>
     <div>
       <div>
@@ -120,7 +123,8 @@ export default {
     return {
       isEmpty: false,
       updteFlag: false,
-      appData: {}
+      appData: {},
+      autoSaveTimer: null
     }
   },
   created () {
@@ -150,24 +154,72 @@ export default {
       }
     },
     addNewProject () {
-      this.$dialog_pop()
-      // this.appData.projects.splice(this.appData.projects.length, 1, {
-      //   id: this.$comfun.guid(),
-      //   name: '电商系统' + new Date().getSeconds(),
-      //   icon: 'http://pics.sc.chinaz.com/Files/pic/faces/5094/1.gif',
-      //   progress: 70,
-      //   'duty-person': '李四',
-      //   'period-start': '2018.06.19',
-      //   'period-end': '2018.07.03',
-      //   'cur-status': '正常',
-      //   'cur-node': '测评',
-      //   'people-num': 29
-      // })
-      // this.updteFlag = true
+      this.$dialog_pop({
+        type: 'add-project-info',
+        callback: (formData) => {
+          if (formData.type === 'only-project') {
+            this.appData.projects.splice(this.appData.projects.length, 1, {
+              id: this.$comfun.guid(),
+              name: formData['add-project-info-data-1'],
+              icon: formData['add-project-info-data-0'],
+              progress: Number(formData['add-project-info-data-2']),
+              'duty-person': formData['add-project-info-data-3'],
+              'period-start': formData['add-project-info-data-4'],
+              'period-end': formData['add-project-info-data-5'],
+              'cur-status': formData['add-project-info-data-6'],
+              'cur-node': formData['add-project-info-data-7'],
+              'people-num': Number(formData['add-project-info-data-8'])
+            })
+            this.updteFlag = true
+          } else if (formData.type === 'project-mode') {
+            // 项目数据
+            this.appData.projects.splice(this.appData.projects.length, 1, {
+              id: this.$comfun.guid(),
+              name: formData['add-project-info-data-1'],
+              icon: formData['add-project-info-data-0'],
+              progress: Number(formData['add-project-info-data-2']),
+              'duty-person': formData['add-project-info-data-3'],
+              'period-start': formData['add-project-info-data-4'],
+              'period-end': formData['add-project-info-data-5'],
+              'cur-status': formData['add-project-info-data-6'],
+              'cur-node': formData['add-project-info-data-7'],
+              'people-num': Number(formData['add-project-info-data-8'])
+            })
+            // 模块数据
+            this.updteFlag = true
+          }
+        }
+      })
     },
     updateProject (pData) {
-      pData.name = '电商系统' + new Date().getSeconds()
-      this.updteFlag = true
+      this.$dialog_pop({
+        type: 'update-project-info',
+        updateModelInit: [
+          pData.icon,
+          pData.name,
+          pData.progress,
+          pData['duty-person'],
+          pData['period-start'],
+          pData['period-end'],
+          pData['cur-status'],
+          pData['cur-node'],
+          pData['people-num']
+        ],
+        callback: (formData) => {
+          if (formData.type === 'update-project') {
+            pData.name = formData['update-project-info-data-1']
+            pData.icon = formData['update-project-info-data-0']
+            pData.progress = Number(formData['update-project-info-data-2'])
+            pData['duty-person'] = formData['update-project-info-data-3']
+            pData['period-start'] = formData['update-project-info-data-4']
+            pData['period-end'] = formData['update-project-info-data-5']
+            pData['cur-status'] = formData['update-project-info-data-6']
+            pData['cur-node'] = formData['update-project-info-data-7']
+            pData['people-num'] = Number(formData['update-project-info-data-8'])
+            this.updteFlag = true
+          }
+        }
+      })
     },
     deleteProject (pIndex) {
       this.appData.projects.splice(pIndex, 1)
@@ -178,6 +230,12 @@ export default {
       }
     },
     addNewMode (pIndex) {
+      this.$dialog_pop({
+        type: 'add-mode-info',
+        callback: (formData) => {
+          console.log(formData)
+        }
+      })
       var pId = this.appData.projects[pIndex].id
       if (!this.appData[pId]) {
         this.$set(this.appData, pId, {
@@ -220,6 +278,12 @@ export default {
       })
     },
     updateMode (mode) {
+      this.$dialog_pop({
+        type: 'update-mode-info',
+        callback: (formData) => {
+          console.log(formData)
+        }
+      })
       mode.name = '电商系统' + new Date().getSeconds()
       this.updteFlag = true
     },
@@ -231,8 +295,20 @@ export default {
       this.updteFlag = true
     },
     saveAppData () {
-      console.log(this.appData)
-      this.updteFlag = false
+      if (this.updteFlag) {
+        console.log(this.appData)
+        this.updteFlag = false
+      }
+    }
+  },
+  watch: {
+    updteFlag (cur, old) {
+      if (cur === true) {
+        clearTimeout(this.autoSaveTimer)
+        this.autoSaveTimer = setTimeout(() => {
+          this.saveAppData()
+        }, 100)
+      }
     }
   }
 }
@@ -242,18 +318,31 @@ export default {
 .title {
   text-align: center;
   font-weight: bold;
-  font-size: 1.8rem;
+  font-size: 2rem;
   margin-top: 1rem;
 }
 
 .update-tip {
-  position: absolute;
-  top: -1.6rem;
+  position: fixed;
+  right: 2rem;
+  bottom: 1.6rem;
   font-size: 0.8rem;
-  background: #f35f4c;
-  padding: 0.2rem 0.4rem;
-  width: calc(90vw - 0.8rem);
+  background: #b2dbe0;
+  color: rgb(51, 51, 51);
+  padding: 0.2rem 1.2rem 0.2rem 0.6rem;
   transition: all 0.4s ease 0s;
+}
+
+.update-tip > img {
+  display: inline-block;
+  vertical-align: middle;
+  height: 30px;
+}
+
+.update-tip > span {
+  display: inline-block;
+  vertical-align: middle;
+  font-weight: bold;
 }
 
 .btn-wrap {

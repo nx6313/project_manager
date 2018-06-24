@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Pop from './pop'
+import Pop from './pop.vue'
 
 Pop.installPop = function (options) {
   var PopComment = Vue.extend(Pop)

@@ -18,15 +18,10 @@ export default {
   color: #1f1f1f;
 }
 
-html {
+html, body {
   padding: 0;
   margin: 0;
   font-size: 16px;
-}
-
-body {
-  padding: 0;
-  margin: 0;
 }
 
 .flex-r {
