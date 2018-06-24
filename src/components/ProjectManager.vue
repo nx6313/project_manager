@@ -186,6 +186,32 @@ export default {
               'people-num': Number(formData['add-project-info-data-8'])
             })
             // 模块数据
+            var pIndex = this.appData.projects.length - 1
+            var pId = this.appData.projects[pIndex].id
+            if (!this.appData[pId]) {
+              this.$set(this.appData, pId, {
+                id: this.appData.projects[pIndex].id,
+                name: this.appData.projects[pIndex].name,
+                icon: this.appData.projects[pIndex].icon,
+                progress: this.appData.projects[pIndex].progress,
+                'duty-person': this.appData.projects[pIndex]['duty-person'],
+                'period-start': this.appData.projects[pIndex]['period-start'],
+                'period-end': this.appData.projects[pIndex]['period-end'],
+                'cur-status': this.appData.projects[pIndex]['cur-status'],
+                'cur-node': this.appData.projects[pIndex]['cur-node'],
+                'people-num': this.appData.projects[pIndex]['people-num'],
+                modes: []
+              })
+            }
+            this.appData[pId].modes.splice(this.appData[pId].modes.length, 1, {
+              name: formData['add-mode-info-data-0'],
+              'duty-person': formData['add-mode-info-data-1'],
+              'period-start': formData['add-mode-info-data-2'],
+              'period-end': formData['add-mode-info-data-3'],
+              'plan-day': Number(formData['add-mode-info-data-4']),
+              'use-day': Number(formData['add-mode-info-data-5']),
+              nodes: formData['add-mode-info-data-6']
+            })
             this.updteFlag = true
           }
         }
@@ -233,59 +259,61 @@ export default {
       this.$dialog_pop({
         type: 'add-mode-info',
         callback: (formData) => {
-          console.log(formData)
-        }
-      })
-      var pId = this.appData.projects[pIndex].id
-      if (!this.appData[pId]) {
-        this.$set(this.appData, pId, {
-          id: this.appData.projects[pIndex].id,
-          name: this.appData.projects[pIndex].name,
-          icon: this.appData.projects[pIndex].icon,
-          progress: this.appData.projects[pIndex].progress,
-          'duty-person': this.appData.projects[pIndex]['duty-person'],
-          'period-start': this.appData.projects[pIndex]['period-start'],
-          'period-end': this.appData.projects[pIndex]['period-end'],
-          'cur-status': this.appData.projects[pIndex]['cur-status'],
-          'cur-node': this.appData.projects[pIndex]['cur-node'],
-          'people-num': this.appData.projects[pIndex]['people-num'],
-          modes: []
-        })
-      }
-      this.appData[pId].modes.splice(this.appData[pId].modes.length, 1, {
-        name: '整车销售',
-        'duty-person': '李四',
-        'period-start': '2018.06.19',
-        'period-end': '2018.07.03',
-        'plan-day': 48,
-        'use-day': 20,
-        nodes: [
-          {
-            title: '需求调研',
-            executors: [
-              {
-                duty: '产品经理',
-                peoples: [
-                  '王大鹏'
-                ]
-              }
-            ],
-            'plan-day': 12,
-            'end-date': '2018-02-12',
-            status: 2
+          if (formData.type === 'only-mode') {
+            var pId = this.appData.projects[pIndex].id
+            if (!this.appData[pId]) {
+              this.$set(this.appData, pId, {
+                id: this.appData.projects[pIndex].id,
+                name: this.appData.projects[pIndex].name,
+                icon: this.appData.projects[pIndex].icon,
+                progress: this.appData.projects[pIndex].progress,
+                'duty-person': this.appData.projects[pIndex]['duty-person'],
+                'period-start': this.appData.projects[pIndex]['period-start'],
+                'period-end': this.appData.projects[pIndex]['period-end'],
+                'cur-status': this.appData.projects[pIndex]['cur-status'],
+                'cur-node': this.appData.projects[pIndex]['cur-node'],
+                'people-num': this.appData.projects[pIndex]['people-num'],
+                modes: []
+              })
+            }
+            this.appData[pId].modes.splice(this.appData[pId].modes.length, 1, {
+              name: formData['add-mode-info-data-0'],
+              'duty-person': formData['add-mode-info-data-1'],
+              'period-start': formData['add-mode-info-data-2'],
+              'period-end': formData['add-mode-info-data-3'],
+              'plan-day': Number(formData['add-mode-info-data-4']),
+              'use-day': Number(formData['add-mode-info-data-5']),
+              nodes: formData['add-mode-info-data-6']
+            })
           }
-        ]
+        }
       })
     },
     updateMode (mode) {
       this.$dialog_pop({
         type: 'update-mode-info',
+        updateModelInit: [
+          mode.name,
+          mode['duty-person'],
+          mode['period-start'],
+          mode['period-end'],
+          mode['plan-day'],
+          mode['use-day']
+        ],
+        modeNodes: [].concat(mode.nodes),
         callback: (formData) => {
-          console.log(formData)
+          if (formData.type === 'update-mode') {
+            mode.name = formData['update-mode-info-data-0']
+            mode['duty-person'] = formData['update-mode-info-data-1']
+            mode['period-start'] = formData['update-mode-info-data-2']
+            mode['period-end'] = formData['update-mode-info-data-3']
+            mode['plan-day'] = Number(formData['update-mode-info-data-4'])
+            mode['use-day'] = Number(formData['update-mode-info-data-5'])
+            mode.nodes = formData['update-mode-info-data-6']
+            this.updteFlag = true
+          }
         }
       })
-      mode.name = '电商系统' + new Date().getSeconds()
-      this.updteFlag = true
     },
     deleteMode (pId, modeIndex) {
       this.appData[pId].modes.splice(modeIndex, 1)
@@ -318,7 +346,7 @@ export default {
 .title {
   text-align: center;
   font-weight: bold;
-  font-size: 2rem;
+  font-size: 1.6rem;
   margin-top: 1rem;
 }
 

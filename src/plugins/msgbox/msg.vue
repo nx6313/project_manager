@@ -57,17 +57,17 @@ export default {
 
 .msg-content {
   position: fixed;
-  top: calc((100% - 3rem) / 2);
-  left: calc((100% - 20rem) / 2);
-  width: 20rem;
-  height: 3rem;
+  top: calc((100% - 2rem) / 2);
+  left: calc((100% - 10rem) / 2);
+  width: 10rem;
+  height: 2rem;
   text-align: center;
-  line-height: 3rem;
+  line-height: 2rem;
   background-color: #6b6b6b;
   color: #efefef;
-  font-size: 1rem;
+  font-size: 0.8rem;
   font-weight: bold;
-  border-radius: 10px;
+  border-radius: 3px;
   z-index: 999999;
   box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.31);
 }

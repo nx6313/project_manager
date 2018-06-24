@@ -134,10 +134,28 @@ export default {
       },
       // 判断字符串是否为空
       isNotNull: function (str) {
-        if (!str || str === '' || str === null || str.toLowerCase() === 'null' || typeof str === 'undefined') {
-          return false
+        if (!this.isJsonOrArr(str) && !this.isNumber(str)) {
+          if (!str || str === '' || str === null || str.toLowerCase() === 'null' || typeof str === 'undefined') {
+            return false
+          }
         }
         return true
+      },
+      // 判断obj是否为json对象或数组
+      isJsonOrArr (obj) {
+        var isjson = typeof obj === 'object' && (Object.prototype.toString.call(obj).toLowerCase() === '[object object]' || Object.prototype.toString.call(obj).toLowerCase() === '[object array]' || Object.prototype.toString.call(obj).toLowerCase() === '[object file]')
+        return isjson
+      },
+      // 判断obj是否为数字
+      isNumber (obj) {
+        if (obj === '' || obj === null || obj === undefined) {
+          return false
+        }
+        if (!isNaN(obj)) {
+          return true
+        } else {
+          return false
+        }
       },
       // 日期格式转字符串，指定格式
       // 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符
