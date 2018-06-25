@@ -124,24 +124,24 @@ export default {
       projectData: {}
     }
   },
-  created () {
+  mounted () {
     this.projectId = this.$route.params.projectid
     this.$dialog_loading()
     this.$comfun.http_get(this, 'http://dashboard.dachangjr.com/index.php/Json/getJson').then((result) => {
       if (result.body.code === 1) {
         this.projectData = JSON.parse(result.body.data)[this.projectId]
+        setTimeout(() => {
+          if (this.projectData && this.projectData.modes) {
+            for (let m = 0; m < this.projectData.modes.length; m++) {
+              let modeIcon = this.$refs['mode-icon-' + m]
+              modeIcon[0].style.top = `-${modeIcon[0].offsetHeight * 1 / 3}px`
+              modeIcon[0].style.right = `-${modeIcon[0].offsetWidth}px`
+            }
+          }
+          scrollTo(0, 0)
+        }, 100)
       }
     })
-  },
-  mounted () {
-    if (this.projectData && this.projectData.modes) {
-      for (let m = 0; m < this.projectData.modes.length; m++) {
-        let modeIcon = this.$refs['mode-icon-' + m]
-        modeIcon[0].style.top = `-${modeIcon[0].offsetHeight * 1 / 3}px`
-        modeIcon[0].style.right = `-${modeIcon[0].offsetWidth}px`
-      }
-    }
-    scrollTo(0, 0)
   },
   methods: {
     formatDate: function (date, fmt) {

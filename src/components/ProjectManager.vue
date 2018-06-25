@@ -67,7 +67,7 @@
                         <td>{{mode['use-day']}}</td>
                         <td>{{mode['plan-day'] - mode['use-day']}}</td>
                         <td>
-                          <button @click="updateMode(mode)">修改</button>
+                          <button @click="updateMode(app, appData[app.id], mode)">修改</button>
                           <button @click="deleteMode(app.id, modeIndex)">删除</button>
                         </td>
                       </tr>
@@ -295,7 +295,7 @@ export default {
         }
       })
     },
-    updateMode (mode) {
+    updateMode (pData, modeAboutP, mode) {
       this.$dialog_pop({
         type: 'update-mode-info',
         updateModelInit: [
@@ -309,6 +309,15 @@ export default {
         modeNodes: [].concat(mode.nodes),
         callback: (formData) => {
           if (formData.type === 'update-mode') {
+            modeAboutP.name = pData.name
+            modeAboutP.icon = pData.icon
+            modeAboutP.progress = pData.progress
+            modeAboutP['duty-person'] = pData['duty-person']
+            modeAboutP['period-start'] = pData['period-start']
+            modeAboutP['period-end'] = pData['period-end']
+            modeAboutP['cur-status'] = pData['cur-status']
+            modeAboutP['cur-node'] = pData['cur-node']
+            modeAboutP['people-num'] = pData['people-num']
             mode.name = formData['update-mode-info-data-0']
             mode['duty-person'] = formData['update-mode-info-data-1']
             mode['period-start'] = formData['update-mode-info-data-2']
