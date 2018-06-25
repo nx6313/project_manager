@@ -13,14 +13,14 @@ export default {
                 '链接': callUrl,
                 '请求返回': response
               })
-              context.$loading_close()
+              context.$dialog_close_loading()
               resolve(response)
             }, response => {
               context.$comfun.consoleBeautiful(context, '接口访问出错：url【' + url + '】', '#BF0F3D', 'https://img.zcool.cn/community/014db6579571700000012e7e602493.gif', {
                 '链接': callUrl,
                 '请求返回': response
               })
-              context.$loading_close()
+              context.$dialog_close_loading()
               reject(response)
             })
           })
@@ -37,13 +37,17 @@ export default {
             if (url.indexOf('http://') === 0 || url.indexOf('https://') === 0) {
               callUrl = url
             }
-            context.$http.post(callUrl, JSON.stringify(paramsData)).then(response => {
+            context.$http.post(callUrl, JSON.stringify(paramsData), {
+              'headers': {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+              }
+            }).then(response => {
               context.$comfun.consoleBeautiful(context, '接口访问完成：url【' + url + '】', '#0FB0BF', 'https://img.zcool.cn/community/01db9f579571700000012e7e9da0fb.gif', {
                 '链接': callUrl,
                 '请求返回': response,
                 '相关参数': paramsData
               })
-              context.$loading_close()
+              context.$dialog_close_loading()
               resolve(response)
             }, response => {
               context.$comfun.consoleBeautiful(context, '接口访问出错：url【' + url + '】', '#BF0F3D', 'https://img.zcool.cn/community/014db6579571700000012e7e602493.gif', {
@@ -51,7 +55,7 @@ export default {
                 '请求返回': response,
                 '相关参数': paramsData
               })
-              context.$loading_close()
+              context.$dialog_close_loading()
               reject(response)
             })
           })
@@ -87,7 +91,7 @@ export default {
                 '请求返回': response,
                 '要上传的视频对象': file
               })
-              context.$loading_close()
+              context.$dialog_close_loading()
               resolve(response)
             }, response => {
               context.$comfun.consoleBeautiful(context, '接口访问出错：url【' + url + '】', '#BF0F3D', 'https://img.zcool.cn/community/014db6579571700000012e7e602493.gif', {
@@ -95,7 +99,7 @@ export default {
                 '请求返回': response,
                 '要上传的视频对象': file
               })
-              context.$loading_close()
+              context.$dialog_close_loading()
               reject(response)
             })
           })

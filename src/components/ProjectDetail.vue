@@ -1,7 +1,7 @@
 <template>
   <div class="project-detail-wrap">
     <div class="data-empty" v-if="!projectData">数据未录入</div>
-    <div v-if="projectData" class="head-wrap">
+    <div v-if="projectData && projectData.progress" class="head-wrap">
       <div class="project-name-wrap">
         <span :style="{ 'background-image': `url(${projectData.icon})` }"></span>
         <span>{{projectData.name}}</span>
@@ -45,7 +45,7 @@
         </div>
       </div>
     </div>
-    <div v-if="projectData" class="mode-detail-wrap">
+    <div v-if="projectData && projectData.progress" class="mode-detail-wrap">
       <div class="mode-item-wrap close" v-for="(mode, index) in projectData.modes" :key="index" :ref="'mode-item-' + index" @click="toggleUnfold(index)">
         <div class="mode-title-wrap">
           <span>{{mode.name}}<span :ref="'mode-icon-' + index">模块{{index + 1}}</span></span>
@@ -126,7 +126,12 @@ export default {
   },
   created () {
     this.projectId = this.$route.params.projectid
-    this.projectData = require('./../../static/data.json')[this.projectId]
+    this.$dialog_loading()
+    this.$comfun.http_get(this, 'http://dashboard.dachangjr.com/index.php/Json/getJson').then((result) => {
+      if (result.body.code === 1) {
+        this.projectData = JSON.parse(result.body.data)[this.projectId]
+      }
+    })
   },
   mounted () {
     if (this.projectData && this.projectData.modes) {

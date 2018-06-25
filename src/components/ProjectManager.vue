@@ -3,7 +3,7 @@
     <div class="title">项目数据管理</div>
     <div class="update-tip" v-show="updteFlag">
       <img src="./../assets/loading.gif">
-      <span>数据保存中...</span>
+      <span>{{updteTipVal}}</span>
     </div>
     <div class="btn-wrap">
       <button @click="addNewProject">添加新项目</button>
@@ -123,20 +123,26 @@ export default {
     return {
       isEmpty: false,
       updteFlag: false,
+      updteTipVal: '数据保存中...',
       appData: {},
       autoSaveTimer: null
     }
   },
   created () {
-    this.appData = require('./../../static/data.json')
-    if (!this.appData.projects) {
-      this.appData = {
-        projects: []
+    this.$dialog_loading()
+    this.$comfun.http_get(this, 'http://dashboard.dachangjr.com/index.php/Json/getJson').then((result) => {
+      if (result.body.code === 1) {
+        this.appData = JSON.parse(result.body.data)
       }
-    }
-    if (this.appData.projects.length === 0) {
-      this.isEmpty = true
-    }
+      if (!this.appData.projects) {
+        this.appData = {
+          projects: []
+        }
+      }
+      if (this.appData.projects.length === 0) {
+        this.isEmpty = true
+      }
+    })
   },
   methods: {
     toggleUnfoldNode (index, nodeIndex) {
@@ -324,8 +330,9 @@ export default {
     },
     saveAppData () {
       if (this.updteFlag) {
-        console.log(this.appData)
-        this.updteFlag = false
+        this.$comfun.http_post(this, 'http://dashboard.dachangjr.com/index.php/Json/update', this.appData).then(() => {
+          this.updteFlag = false
+        })
       }
     }
   },
@@ -381,6 +388,17 @@ export default {
 
 .btn-wrap > button {
   padding: 0.4rem 0.8rem;
+  border: none;
+  padding: 0.2rem 0.4rem;
+  background-color: #8e9fb9;
+  outline: none;
+  border-radius: 2px;
+  color: #ffffff;
+  font-size: 0.6rem;
+}
+
+.btn-wrap > button:active {
+  background-color: #8eb999;
 }
 
 table {
@@ -454,8 +472,19 @@ table.detail-table th {
   text-align: left;
 }
 
-.btn-wrap > button {
+td button {
   padding: 0.4rem 0.8rem;
+  border: none;
+  padding: 0.2rem 0.4rem;
+  background-color: #8e9fb9;
+  outline: none;
+  border-radius: 2px;
+  color: #ffffff;
+  font-size: 0.6rem;
+}
+
+td button:active {
+  background-color: #8eb999;
 }
 
 div.node-tree-wrap {

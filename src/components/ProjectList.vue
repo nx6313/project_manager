@@ -56,7 +56,12 @@ export default {
     }
   },
   created () {
-    this.appData = require('./../../static/data.json')
+    this.$dialog_loading()
+    this.$comfun.http_get(this, 'http://dashboard.dachangjr.com/index.php/Json/getJson').then((result) => {
+      if (result.body.code === 1) {
+        this.appData = JSON.parse(result.body.data)
+      }
+    })
   },
   methods: {
     toDetail (project) {
