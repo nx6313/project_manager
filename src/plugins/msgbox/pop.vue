@@ -296,7 +296,7 @@ export default {
             executors: [
               {
                 duty: data['data-1'],
-                peoples: data['data-2'].replace('，', '|').replace(',', '|').replace(';', '|').replace('、', '|').split('|')
+                peoples: data['data-2'].replace(new RegExp('，', 'gm'), '|').replace(new RegExp(',', 'gm'), '|').replace(new RegExp(';', 'gm'), '|').replace(new RegExp('、', 'gm'), '|').split('|')
               }
             ],
             'plan-day': Number(data['data-3']),
@@ -322,7 +322,7 @@ export default {
         callback: (data) => {
           this.modeNodes[nodeIndex].executors.splice(this.modeNodes[nodeIndex].executors.length, 1, {
             duty: data['data-0'],
-            peoples: data['data-1'].replace('，', '|').replace(',', '|').replace(';', '|').replace('、', '|').split('|')
+            peoples: data['data-1'].replace(new RegExp('，', 'gm'), '|').replace(new RegExp(',', 'gm'), '|').replace(new RegExp(';', 'gm'), '|').replace(new RegExp('、', 'gm'), '|').split('|')
           })
         }
       })
@@ -337,8 +337,8 @@ export default {
           }
         ],
         callback: (data) => {
-          for (let p = 0; p < data['data-0'].replace('，', '|').replace(',', '|').replace(';', '|').replace('、', '|').split('|').length; p++) {
-            this.modeNodes[nodeIndex].executors[exeIndex].peoples.splice(this.modeNodes[nodeIndex].executors[exeIndex].peoples.length, 1, data['data-0'].replace('，', '|').replace(',', '|').replace(';', '|').replace('、', '|').split('|')[p])
+          for (let p = 0; p < data['data-0'].replace(new RegExp('，', 'gm'), '|').replace(new RegExp(',', 'gm'), '|').replace(new RegExp(';', 'gm'), '|').replace(new RegExp('、', 'gm'), '|').split('|').length; p++) {
+            this.modeNodes[nodeIndex].executors[exeIndex].peoples.splice(this.modeNodes[nodeIndex].executors[exeIndex].peoples.length, 1, data['data-0'].replace(new RegExp('，', 'gm'), '|').replace(new RegExp(',', 'gm'), '|').replace(new RegExp(';', 'gm'), '|').replace(new RegExp('、', 'gm'), '|').split('|')[p])
           }
         }
       })
