@@ -2,7 +2,7 @@
   <div class="project-list-wrap">
     <div class="head-wrap">
       <span>大昌集团</span>
-      <span>信息商业智能管理中心</span>
+      <span>{{appName}}</span>
     </div>
     <div class="data-empty" v-if="!(appData.projects && appData.projects.length > 0)">暂无计划中项目</div>
     <div v-if="appData.projects && appData.projects.length > 0" class="projects-wrap">
@@ -52,12 +52,15 @@
 export default {
   data () {
     return {
-      appData: {}
+      appData: {
+        appName: ''
+      }
     }
   },
   created () {
+    this.appName = this.$moment.appname
     this.$dialog_loading()
-    this.$comfun.http_get(this, 'http://dashboard.dachangjr.com/index.php/Json/getJson').then((result) => {
+    this.$comfun.http_get(this, 'http://dashboard.dachangjr.com/index.php/Json/getJson?filename=' + this.$moment.filename).then((result) => {
       if (result.body.code === 1) {
         this.appData = JSON.parse(result.body.data)
       }

@@ -1,7 +1,10 @@
 <template>
   <div v-if="isShow" id="dialog-confirm-wrap" class="dialog-confirm-wrap">
     <div class="confirm-shade animated fadeIn" @click="closeConfirm"></div>
-    <div class="confirm-content animated flipInX">
+    <div :class="['confirm-content', 'animated', 'flipInX', (tip !== '' && items.length === 0) ? 'confirm-tip-content-wrap' : '']">
+      <div class="confirm-tip" v-if="tip !== '' && items.length === 0">
+        {{tip}}
+      </div>
       <div class="confirm-item-wrap" v-for="(item, itemIndex) in items" :key="itemIndex">
         <span>{{item.title}}</span>
         <input v-if="item.type === undefined || item.type === 'text'" type="text" :placeholder="item.placeholder !== undefined ? item.placeholder : ''" v-model="item.model">
@@ -22,6 +25,7 @@ export default {
     return {
       isShow: true,
       shadeClose: false,
+      tip: '',
       items: [],
       callback: () => {}
     }
@@ -109,6 +113,20 @@ export default {
   box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.31);
 }
 
+.confirm-tip-content-wrap {
+  top: calc((100% - 10rem) / 2);
+  left: calc((100% - 20rem) / 2);
+  width: 20rem;
+  height: 10rem;
+}
+
+.confirm-content > .confirm-tip {
+  position: relative;
+  color: #ffffff;
+  text-align: center;
+  margin: 2.6rem 0;
+}
+
 .confirm-item-wrap {
   position: relative;
   font-size: 0;
@@ -159,6 +177,10 @@ export default {
   border-radius: 2px;
   color: #ffffff;
   font-size: 0.6rem;
+}
+
+.btn-wrap > button:nth-of-type(n + 2) {
+  margin-left: 1rem;
 }
 
 .btn-wrap > button:active {

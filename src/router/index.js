@@ -5,6 +5,7 @@ import Moment from '@/utils/moment.js'
 import ComFun from '@/utils/comfun.js'
 import '@/plugins/animate.css'
 import Msgbox from '@/plugins/msgbox/msgbox.js'
+import Directives from '@/plugins/directives.js'
 import ProjectList from '@/components/ProjectList'
 import ProjectDetail from '@/components/ProjectDetail'
 import ProjectManager from '@/components/ProjectManager'
@@ -14,6 +15,7 @@ Vue.use(VueResource)
 Vue.use(Moment)
 Vue.use(ComFun)
 Vue.use(Msgbox)
+Vue.use(Directives)
 
 var router = new Router({
   routes: [

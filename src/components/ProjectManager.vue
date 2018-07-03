@@ -2,8 +2,14 @@
   <div class="project-manager-wrap">
     <div class="title">项目数据管理</div>
     <div class="update-tip" v-show="updteFlag">
+      <div class="update-shade"></div>
       <img src="./../assets/loading.gif">
       <span>{{updteTipVal}}</span>
+    </div>
+    <div class="update-tip" v-show="backUpFlag">
+      <div class="update-shade"></div>
+      <img src="./../assets/loading.gif">
+      <span>{{backUpTipVal}}</span>
     </div>
     <div class="btn-wrap">
       <button @click="addNewProject">添加新项目</button>
@@ -124,13 +130,15 @@ export default {
       isEmpty: false,
       updteFlag: false,
       updteTipVal: '数据保存中...',
+      backUpFlag: false,
+      backUpTipVal: '备份数据保存中...',
       appData: {},
       autoSaveTimer: null
     }
   },
   created () {
     this.$dialog_loading()
-    this.$comfun.http_get(this, 'http://dashboard.dachangjr.com/index.php/Json/getJson').then((result) => {
+    this.$comfun.http_get(this, 'http://dashboard.dachangjr.com/index.php/Json/getJson?filename=' + this.$moment.filename).then((result) => {
       if (result.body.code === 1) {
         this.appData = JSON.parse(result.body.data)
       }
@@ -254,12 +262,17 @@ export default {
       })
     },
     deleteProject (pIndex) {
-      this.appData.projects.splice(pIndex, 1)
-      if (this.isEmpty && this.appData.projects.length === 0) {
-        this.updteFlag = false
-      } else {
-        this.updteFlag = true
-      }
+      this.$dialog_confirm({
+        tip: '确定删除项目吗？',
+        callback: () => {
+          this.appData.projects.splice(pIndex, 1)
+          if (this.isEmpty && this.appData.projects.length === 0) {
+            this.updteFlag = false
+          } else {
+            this.updteFlag = true
+          }
+        }
+      })
     },
     addNewMode (pIndex) {
       this.$dialog_pop({
@@ -291,6 +304,7 @@ export default {
               'use-day': Number(formData['add-mode-info-data-5']),
               nodes: formData['add-mode-info-data-6']
             })
+            this.updteFlag = true
           }
         }
       })
@@ -331,16 +345,25 @@ export default {
       })
     },
     deleteMode (pId, modeIndex) {
-      this.appData[pId].modes.splice(modeIndex, 1)
-      if (this.appData[pId].modes.length === 0) {
-        delete this.appData[pId]
-      }
-      this.updteFlag = true
+      this.$dialog_confirm({
+        tip: '确定删除模块吗？',
+        callback: () => {
+          this.appData[pId].modes.splice(modeIndex, 1)
+          if (this.appData[pId].modes.length === 0) {
+            delete this.appData[pId]
+          }
+          this.updteFlag = true
+        }
+      })
     },
     saveAppData () {
       if (this.updteFlag) {
-        this.$comfun.http_post(this, 'http://dashboard.dachangjr.com/index.php/Json/update', this.appData).then(() => {
+        this.$comfun.http_post(this, 'http://dashboard.dachangjr.com/index.php/Json/update', { filename: this.$moment.filename, data: this.appData }).then(() => {
           this.updteFlag = false
+          this.backUpFlag = true
+          this.$comfun.http_post(this, 'http://dashboard.dachangjr.com/index.php/Json/update', { filename: this.$moment.filename + '_', data: this.appData }).then(() => {
+            this.backUpFlag = false
+          })
         })
       }
     }
@@ -375,18 +398,35 @@ export default {
   color: rgb(51, 51, 51);
   padding: 0.2rem 1.2rem 0.2rem 0.6rem;
   transition: all 0.4s ease 0s;
+  z-index: 99;
+}
+
+.update-tip > .update-shade {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(62, 61, 61, 0.1);
+  transition: all 0.4s ease 0s;
 }
 
 .update-tip > img {
+  position: relative;
   display: inline-block;
   vertical-align: middle;
   height: 30px;
+  z-index: 999;
+  pointer-events: none;
 }
 
 .update-tip > span {
+  position: relative;
   display: inline-block;
   vertical-align: middle;
   font-weight: bold;
+  z-index: 999;
+  pointer-events: none;
 }
 
 .btn-wrap {

@@ -1,10 +1,10 @@
 <template>
   <div class="project-detail-wrap">
     <div class="data-empty" v-if="!projectData">数据未录入</div>
-    <div v-if="projectData && projectData.progress" class="head-wrap">
+    <div v-if="projectData && projectData.progress !== undefined" class="head-wrap">
       <div class="project-name-wrap">
         <span :style="{ 'background-image': `url(${projectData.icon})` }"></span>
-        <span>{{projectData.name}}</span>
+        <span v-marquee>{{projectData.name}}</span>
         <div class="progress-wrap">
           <div class="wrapper right">
             <div class="circle-progress rightcircle" :style="progressRotate('right', projectData.progress)"></div>
@@ -45,7 +45,7 @@
         </div>
       </div>
     </div>
-    <div v-if="projectData && projectData.progress" class="mode-detail-wrap">
+    <div v-if="projectData && projectData.progress !== undefined" class="mode-detail-wrap">
       <div class="mode-item-wrap close" v-for="(mode, index) in projectData.modes" :key="index" :ref="'mode-item-' + index" @click="toggleUnfold(index)">
         <div class="mode-title-wrap">
           <span>{{mode.name}}<span :ref="'mode-icon-' + index">模块{{index + 1}}</span></span>
@@ -127,7 +127,7 @@ export default {
   mounted () {
     this.projectId = this.$route.params.projectid
     this.$dialog_loading()
-    this.$comfun.http_get(this, 'http://dashboard.dachangjr.com/index.php/Json/getJson').then((result) => {
+    this.$comfun.http_get(this, 'http://dashboard.dachangjr.com/index.php/Json/getJson?filename=' + this.$moment.filename).then((result) => {
       if (result.body.code === 1) {
         this.projectData = JSON.parse(result.body.data)[this.projectId]
         setTimeout(() => {
@@ -252,7 +252,7 @@ export default {
 }
 
 .head-wrap > .project-name-wrap > span:last-of-type {
-  width: 7.6rem;
+  width: 10rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
